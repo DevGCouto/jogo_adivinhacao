@@ -3,8 +3,8 @@ services:
     name: jogo-adivinhacao
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: |
-      python manage.py migrate && gunicorn jogo_project.wsgi:application
+    startCommand: >
+  bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn jogo_project.wsgi:application"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: jogo_project.settings
