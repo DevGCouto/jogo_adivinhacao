@@ -108,7 +108,7 @@ from django.http import HttpResponse
 
 def coletar_estaticos(request):
     try:
-        call_command('collectstatic', interactive=False)
+        call_command('collectstatic', verbosity=0, interactive=False, clear=True)
         return HttpResponse("Arquivos estáticos coletados com sucesso!")
     except Exception as e:
         return HttpResponse(f"Erro ao coletar estáticos: {e}")
