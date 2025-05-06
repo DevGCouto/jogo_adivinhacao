@@ -5,11 +5,12 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: >
       bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn jogo_project.wsgi:application"
-    envVars:
+        envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: jogo_project.settings
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS
         value: jogo-adivinhacao-14v9.onrender.com
-
+      - key: DEBUG
+        value: "False" 
