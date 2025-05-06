@@ -7,7 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'chave-insegura-dev')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -72,5 +73,6 @@ STATICFILES_DIRS = [ BASE_DIR / "meu_app/static" ]
 import os
 
 if not DEBUG:
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
