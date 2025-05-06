@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo com Tema Dinâmico</title>
+  {% load static %}
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'meu_app/style.css' %}">
+</head>
+<body class="{% if tema == 'claro' %}claro{% endif %}">
+
+  <!-- Container para botão de tema e ranking -->
+  <div style="position: absolute; top: 20px; right: 20px; text-align: right; z-index: 2;">
+    <form method="POST" style="display:inline;">
+      {% csrf_token %}
+      <button class="tema-btn" type="submit" name="alternar_tema">🌞 Alternar Tema</button>
+    </form>
+    
+    {% if ranking %}
+  <div id="ranking" style="margin-top: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;">
+    <h3>🏆 Ranking – Nível: {{ ranking_nivel|title }}</h3>
+
+    <!-- Botões para trocar entre rankings -->
+    <div style="margin-bottom: 10px;">
+      <a href="?ranking_nivel=facil"><button {% if ranking_nivel == 'facil' %}disabled{% endif %}>Fácil</button></a>
+      <a href="?ranking_nivel=medio"><button {% if ranking_nivel == 'medio' %}disabled{% endif %}>Médio</button></a>
+      <a href="?ranking_nivel=dificil"><button {% if ranking_nivel == 'dificil' %}disabled{% endif %}>Difícil</button></a>
+    </div>
+
+    <ol style="padding-left: 20px;">
+      {% for r in ranking %}
+        <li>
+          {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}🔸{% endif %}
+          {{ r.nome }} – {{ r.tentativas }} tentativas
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+{% endif %}
+
+  </div>
+
+  <!-- Container que centraliza o .card -->
+  <div class="container">
+    <div class="card">
+      <div class="mensagem {% if 'Parabéns' in mensagem %}sucesso{% else %}erro{% endif %}">
+        {{ mensagem }}
+      </div>
+      
+      <h1>🌗 Adivinhe o Número!</h1>
+
+      <form method="post">
+        {% csrf_token %}
+        <label for="nivel">Escolha o nível:</label>
+        <select name="nivel">
+            <option value="facil">Fácil (1-50)</option>
+            <option value="medio" selected>Médio (1-999)</option>
+            <option value="dificil">Difícil (1-5000)</option>
+        </select>
+        <button type="submit">Começar o jogo</button>
+      </form>
+
+      <hr>
+
+      <p>Tentativas: {{ tentativas }} / {{ max_tentativas }}</p>
+
+      <form method="post">
+        {% csrf_token %}
+        <input type="text" name="palpite" placeholder="Digite seu palpite">
+        {% if "Parabéns" in mensagem %}
+  <input type="text" name="nome" placeholder="Seu nome para o ranking" required>
+{% endif %}
+        <button type="submit">Enviar palpite</button>
+      </form>
+
+      <!-- MOSTRA O FORM APENAS QUANDO O JOGADOR ACERTA -->
+{% if acertou %}
+<form method="post">
+  {% csrf_token %}
+  <input type="text" name="nome" placeholder="Digite seu nome para o ranking" required>
+  <button type="submit" name="salvar_nome">Salvar nome</button>
+</form>
+{% endif %}
+      {% if tentativas_restantes is not None and not acertou %}
+        <div class="mensagem" style="background-color: rgba(255,255,255,0.1); color: #fff; border-radius: 10px;">
+          ❤️ Tentativas restantes: {{ tentativas_restantes }}
+        </div>
+      {% endif %}
+
+      {% if palpites %}
+        <div class="mensagem" style="margin-top: 20px; background: rgba(245, 242, 242, 0.3); border-radius: 10px;">
+          <strong>📜 Seus palpites:</strong>
+          <p>{{ palpites|join:', ' }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+</body>
+
+<footer style="text-align: center; margin-top: 40px; font-size: 0.9rem; color: #6b6a6a;">
+  Feito com 💚 por Gabriel &copy; 2025
+</footer>
+
+</html>
+
+
+
+
+
+
