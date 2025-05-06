@@ -103,6 +103,12 @@ def forcar_migracao(request):
     except Exception as e:
         return HttpResponse(f"Erro ao migrar: {e}")
 
+from django.core.management import call_command
+from django.http import HttpResponse
+
+def coletar_estaticos(request):
+    call_command('collectstatic', interactive=False)
+    return HttpResponse("Arquivos estáticos coletados.")
 
 
 
