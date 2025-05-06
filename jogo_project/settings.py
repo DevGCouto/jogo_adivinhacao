@@ -9,7 +9,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'chave-insegura-dev')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['jogo-adivinhacao-14v9.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
