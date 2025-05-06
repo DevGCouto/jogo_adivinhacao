@@ -93,6 +93,16 @@ def jogo_adivinhacao(request):
         "ranking_nivel": nivel_ranking,
     })
 
+from django.core.management import call_command
+from django.http import HttpResponse
+
+def forcar_migracao(request):
+    try:
+        call_command('migrate')
+        return HttpResponse("Migrações aplicadas com sucesso!")
+    except Exception as e:
+        return HttpResponse(f"Erro ao migrar: {e}")
+
 
 
 
